@@ -1,14 +1,12 @@
 package com.firm.brokage.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.firm.brokage.entity.Order;
 import com.firm.brokage.enums.OrderSide;
 import com.firm.brokage.enums.OrderStatus;
 import lombok.Builder;
 import lombok.Data;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -21,8 +19,17 @@ public class OrderResponse {
 	private Integer size;
 	private Integer price;
 	private OrderStatus status;
-
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime createDate;
+
+	public static OrderResponse fromOrder(Order order) {
+		return OrderResponse.builder()
+				.customerId(order.getCustomerId())
+				.assetName(order.getAssetName())
+				.orderSide(order.getOrderSide())
+				.size(order.getSize())
+				.price(order.getPrice())
+				.status(order.getStatus())
+				.createDate(new Timestamp(order.getCreateDate()).toLocalDateTime())
+				.build();
+	}
 }

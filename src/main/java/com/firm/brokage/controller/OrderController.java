@@ -6,17 +6,15 @@ import com.firm.brokage.entity.Order;
 import com.firm.brokage.enums.OrderSide;
 import com.firm.brokage.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/order")
@@ -35,16 +33,23 @@ public class OrderController {
 				.build();
 		order = orderService.createOrder(order);
 
-		var response = OrderResponse.builder()
-				.customerId(order.getCustomerId())
-				.assetName(order.getAssetName())
-				.orderSide(order.getOrderSide())
-				.size(order.getSize())
-				.price(order.getPrice())
-				.status(order.getStatus())
-				.createDate(new Timestamp(order.getCreateDate()).toLocalDateTime())
-				.build();
+		return ResponseEntity.ok(OrderResponse.fromOrder(order));
+	}
 
-		return ResponseEntity.ok(response);
+	@GetMapping
+	public ResponseEntity<List<OrderResponse>> listOrders(
+			@RequestParam Long customer,
+			@RequestParam LocalDateTime from,
+			@RequestParam LocalDateTime to
+	) {
+		var fromEpoch = from.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+		var toEpoch = to.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+		var orders = orderService.listOrders(customer, fromEpoch, toEpoch);
+
+		return ResponseEntity.ok(
+				orders.stream()
+						.map(OrderResponse::fromOrder)
+						.collect(Collectors.toList())
+		);
 	}
 }

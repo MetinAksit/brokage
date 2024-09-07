@@ -5,14 +5,18 @@ import com.firm.brokage.converter.OrderStatusConverter;
 import com.firm.brokage.enums.OrderSide;
 import com.firm.brokage.enums.OrderStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
-@Entity
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Table(name = "\"ORDER\"")
 public class Order {
 
