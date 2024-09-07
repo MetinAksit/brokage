@@ -1,6 +1,6 @@
-package com.firm.brokage.repositories;
+package com.firm.brokage.repository;
 
-import com.firm.brokage.entities.Asset;
+import com.firm.brokage.entity.Asset;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.firm.brokage.entities;
+package com.firm.brokage.entity;
 
 import com.firm.brokage.enums.OrderSide;
 import com.firm.brokage.enums.OrderStatus;
@@ -39,6 +39,7 @@ public class Order {
 
 	@PrePersist
 	void prePersist() {
+		setStatus(OrderStatus.PENDING);
 		setCreateDate(Instant.now().toEpochMilli());
 	}
 }

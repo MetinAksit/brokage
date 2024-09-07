@@ -1,7 +1,7 @@
 package com.firm.brokage;
 
-import com.firm.brokage.entities.Asset;
-import com.firm.brokage.repositories.AssetRepository;
+import com.firm.brokage.entity.Asset;
+import com.firm.brokage.repository.AssetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

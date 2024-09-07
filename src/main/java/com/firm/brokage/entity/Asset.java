@@ -1,4 +1,4 @@
-package com.firm.brokage.entities;
+package com.firm.brokage.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
