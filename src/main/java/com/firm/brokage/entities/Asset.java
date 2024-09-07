@@ -1,10 +1,12 @@
 package com.firm.brokage.entities;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
 @Data
+@Builder
 @Table(name = "ASSET")
 public class Asset {
 
