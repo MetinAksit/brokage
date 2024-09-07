@@ -1,6 +1,7 @@
 package com.firm.brokage.handler;
 
 import com.firm.brokage.dto.ErrorResponse;
+import com.firm.brokage.exception.BusinessException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -17,19 +18,6 @@ import java.util.Optional;
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler {
-
-//	@ExceptionHandler({ConstraintViolationException.class})
-//	public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
-//		ErrorResponse.Error error = ErrorResponse.Error.builder()
-//				.code(HttpStatus.BAD_REQUEST.getReasonPhrase())
-//				.message(e.getMessage())
-//				.build();
-//		ErrorResponse errorApiResponse = ErrorResponse.builder()
-//				.error(error)
-//				.build();
-//
-//		return ResponseEntity.badRequest().body(errorApiResponse);
-//	}
 
 	@ExceptionHandler({HttpMessageNotReadableException.class})
 	public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
@@ -59,6 +47,19 @@ public class GlobalExceptionHandler {
 		ErrorResponse.Error error = ErrorResponse.Error.builder()
 				.code(HttpStatus.BAD_REQUEST.getReasonPhrase())
 				.message(message.orElseGet(HttpStatus.BAD_REQUEST::getReasonPhrase))
+				.build();
+
+		ErrorResponse errorApiResponse = ErrorResponse.builder()
+				.error(error)
+				.build();
+		return ResponseEntity.badRequest().body(errorApiResponse);
+	}
+
+	@ExceptionHandler({BusinessException.class})
+	public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
+		ErrorResponse.Error error = ErrorResponse.Error.builder()
+				.code(HttpStatus.BAD_REQUEST.getReasonPhrase())
+				.message(e.getMessage())
 				.build();
 
 		ErrorResponse errorApiResponse = ErrorResponse.builder()

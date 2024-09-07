@@ -1,14 +1,18 @@
 package com.firm.brokage.entity;
 
+import com.firm.brokage.converter.OrderSideConverter;
+import com.firm.brokage.converter.OrderStatusConverter;
 import com.firm.brokage.enums.OrderSide;
 import com.firm.brokage.enums.OrderStatus;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
 
 @Entity
 @Data
+@Builder
 @Table(name = "\"ORDER\"")
 public class Order {
 
@@ -23,6 +27,7 @@ public class Order {
 	private String assetName;
 
 	@Column(name = "ORDER_SIDE", nullable = false)
+	@Convert(converter = OrderSideConverter.class)
 	private OrderSide orderSide;
 
 	@Column(name = "SIZE", nullable = false)
@@ -32,6 +37,7 @@ public class Order {
 	private Integer price;
 
 	@Column(name = "STATUS", nullable = false)
+	@Convert(converter = OrderStatusConverter.class)
 	private OrderStatus status;
 
 	@Column(name = "CREATE_DATE", nullable = false, updatable = false)
