@@ -1,12 +1,15 @@
 package com.firm.brokage.controller;
 
+import com.firm.brokage.annotation.ValidOrderStatus;
 import com.firm.brokage.dto.OrderRequest;
 import com.firm.brokage.dto.OrderResponse;
 import com.firm.brokage.entity.Order;
 import com.firm.brokage.enums.OrderSide;
+import com.firm.brokage.enums.OrderStatus;
 import com.firm.brokage.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,11 +43,18 @@ public class OrderController {
 	public ResponseEntity<List<OrderResponse>> listOrders(
 			@RequestParam Long customer,
 			@RequestParam LocalDateTime from,
-			@RequestParam LocalDateTime to
+			@RequestParam LocalDateTime to,
+			@RequestParam(required = false) @ValidOrderStatus String status
 	) {
 		var fromEpoch = from.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 		var toEpoch = to.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-		var orders = orderService.listOrders(customer, fromEpoch, toEpoch);
+
+		List<Order> orders;
+		if (StringUtils.hasText(status)) {
+			orders = orderService.listOrders(customer, fromEpoch, toEpoch, OrderStatus.fromValue(status));
+		} else {
+			orders = orderService.listOrders(customer, fromEpoch, toEpoch);
+		}
 
 		return ResponseEntity.ok(
 				orders.stream()

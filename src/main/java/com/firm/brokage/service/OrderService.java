@@ -2,6 +2,7 @@ package com.firm.brokage.service;
 
 import com.firm.brokage.entity.Order;
 import com.firm.brokage.enums.OrderSide;
+import com.firm.brokage.enums.OrderStatus;
 import com.firm.brokage.exception.BusinessException;
 import com.firm.brokage.repository.AssetRepository;
 import com.firm.brokage.repository.OrderRepository;
@@ -51,5 +52,9 @@ public class OrderService {
 
 	public List<Order> listOrders(Long customer, Long from, Long to) {
 		return orderRepository.findByCustomerIdAndCreateDateBetween(customer, from, to);
+	}
+
+	public List<Order> listOrders(Long customer, Long from, Long to, OrderStatus status) {
+		return orderRepository.findByCustomerIdAndCreateDateBetweenAndStatus(customer, from, to, status);
 	}
 }

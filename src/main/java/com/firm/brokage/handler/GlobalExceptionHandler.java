@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Objects;
@@ -68,6 +69,26 @@ public class GlobalExceptionHandler {
 					.map(DefaultMessageSourceResolvable::getDefaultMessage)
 					.filter(Objects::nonNull)
 					.findFirst();
+		} catch (Exception ex) {
+			message = Optional.empty();
+		}
+
+		ErrorResponse.Error error = ErrorResponse.Error.builder()
+				.code(HttpStatus.BAD_REQUEST.getReasonPhrase())
+				.message(message.orElseGet(HttpStatus.BAD_REQUEST::getReasonPhrase))
+				.build();
+
+		ErrorResponse errorApiResponse = ErrorResponse.builder()
+				.error(error)
+				.build();
+		return ResponseEntity.badRequest().body(errorApiResponse);
+	}
+
+	@ExceptionHandler({HandlerMethodValidationException.class})
+	public ResponseEntity<ErrorResponse> handleHandlerMethodValidationException(HandlerMethodValidationException e) {
+		Optional<String> message;
+		try {
+			message = Optional.of(Objects.requireNonNull(e.getAllValidationResults().get(0).getResolvableErrors().get(0).getDefaultMessage()));
 		} catch (Exception ex) {
 			message = Optional.empty();
 		}
