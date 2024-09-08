@@ -1,7 +1,7 @@
 package com.firm.brokage.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.firm.brokage.annotation.ValidOrderSide;
+import com.firm.brokage.annotation.ValidEnum;
 import com.firm.brokage.entity.Order;
 import com.firm.brokage.enums.OrderSide;
 import jakarta.validation.constraints.Min;
@@ -26,7 +26,7 @@ public class OrderRequest {
 	private String asset;
 
 	@NotBlank(message = "order side must be supplied")
-	@ValidOrderSide
+	@ValidEnum(enumClass = OrderSide.class, message = "order side must be supplied correctly")
 	private String side;
 
 	@NotNull(message = "order size must be supplied")
@@ -41,7 +41,7 @@ public class OrderRequest {
 		return Order.builder()
 				.customerId(request.getCustomer())
 				.assetName(request.getAsset())
-				.orderSide(OrderSide.fromValue(request.getSide()))
+				.orderSide(OrderSide.valueOf(request.getSide()))
 				.size(request.getSize())
 				.price(request.getPrice())
 				.build();

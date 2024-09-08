@@ -9,11 +9,11 @@ public class OrderSideConverter implements AttributeConverter<OrderSide, String>
 
 	@Override
 	public String convertToDatabaseColumn(OrderSide orderSide) {
-		return orderSide != null ? orderSide.getValue() : null;
+		return orderSide != null ? orderSide.name() : null;
 	}
 
 	@Override
 	public OrderSide convertToEntityAttribute(String dbData) {
-		return dbData != null ? OrderSide.fromValue(dbData) : null;
+		return dbData != null ? OrderSide.valueOf(dbData) : null;
 	}
 }

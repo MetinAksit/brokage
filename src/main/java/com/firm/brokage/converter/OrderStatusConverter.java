@@ -9,11 +9,11 @@ public class OrderStatusConverter implements AttributeConverter<OrderStatus, Str
 
 	@Override
 	public String convertToDatabaseColumn(OrderStatus orderStatus) {
-		return orderStatus != null ? orderStatus.getValue() : null;
+		return orderStatus != null ? orderStatus.name() : null;
 	}
 
 	@Override
 	public OrderStatus convertToEntityAttribute(String dbData) {
-		return dbData != null ? OrderStatus.fromValue(dbData) : null;
+		return dbData != null ? OrderStatus.valueOf(dbData) : null;
 	}
 }

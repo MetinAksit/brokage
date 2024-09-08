@@ -1,6 +1,6 @@
 package com.firm.brokage.controller;
 
-import com.firm.brokage.annotation.ValidOrderStatus;
+import com.firm.brokage.annotation.ValidEnum;
 import com.firm.brokage.dto.OrderRequest;
 import com.firm.brokage.dto.OrderResponse;
 import com.firm.brokage.entity.Order;
@@ -35,14 +35,14 @@ public class OrderController {
 			@RequestParam Long customer,
 			@RequestParam LocalDateTime from,
 			@RequestParam LocalDateTime to,
-			@RequestParam(required = false) @ValidOrderStatus String status
+			@RequestParam(required = false) @ValidEnum(enumClass = OrderStatus.class, message = "order status must be supplied correctly") String status
 	) {
 		var fromEpoch = from.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 		var toEpoch = to.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
 		List<Order> orders;
 		if (StringUtils.hasText(status)) {
-			orders = orderService.listOrders(customer, fromEpoch, toEpoch, OrderStatus.fromValue(status));
+			orders = orderService.listOrders(customer, fromEpoch, toEpoch, OrderStatus.valueOf(status));
 		} else {
 			orders = orderService.listOrders(customer, fromEpoch, toEpoch);
 		}

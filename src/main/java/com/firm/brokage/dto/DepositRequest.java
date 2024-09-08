@@ -1,7 +1,8 @@
 package com.firm.brokage.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.firm.brokage.annotation.ValidCurrency;
+import com.firm.brokage.annotation.ValidEnum;
+import com.firm.brokage.enums.Currency;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +20,7 @@ public class DepositRequest {
 	private Long customer;
 
 	@NotBlank(message = "currency must be supplied")
-	@ValidCurrency
+	@ValidEnum(enumClass = Currency.class, message = "currency must be supplied correctly")
 	private String currency;
 
 	@NotNull(message = "amount must be supplied")

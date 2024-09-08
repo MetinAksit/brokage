@@ -22,7 +22,7 @@ public class OrderService {
 	public Order createOrder(Order order) {
 		if (OrderSide.BUY.equals(order.getOrderSide())) {
 			// check if price amount exists in customer TRY asset
-			var tryAsset = assetRepository.findByCustomerIdAndAssetName(order.getCustomerId(), Currency.TRY.getValue());
+			var tryAsset = assetRepository.findByCustomerIdAndAssetName(order.getCustomerId(), Currency.TRY.name());
 			if (tryAsset == null || tryAsset.getUsableSize() < order.getPrice()) {
 				throw new BusinessException("Customer doesn't have enough deposit!");
 			}
@@ -74,7 +74,7 @@ public class OrderService {
 
 		if (OrderSide.BUY.equals(order.getOrderSide())) {
 			// if buy, find customer try asset, add price to usable size
-			var tryAsset = assetRepository.findByCustomerIdAndAssetName(order.getCustomerId(), Currency.TRY.getValue());
+			var tryAsset = assetRepository.findByCustomerIdAndAssetName(order.getCustomerId(), Currency.TRY.name());
 			tryAsset.setUsableSize(tryAsset.getUsableSize() + order.getPrice());
 			assetRepository.save(tryAsset);
 		} else if (OrderSide.SELL.equals(order.getOrderSide())) {
