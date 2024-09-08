@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -51,7 +50,7 @@ public class OrderController {
 		return ResponseEntity.ok(
 				orders.stream()
 						.map(OrderResponse::fromOrder)
-						.collect(Collectors.toList())
+						.toList()
 		);
 	}
 

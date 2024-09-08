@@ -6,6 +6,8 @@ import com.firm.brokage.repository.AssetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class AssetService {
@@ -45,5 +47,9 @@ public class AssetService {
 
 		assetRepository.save(asset);
 		return asset;
+	}
+
+	public List<Asset> listAssets(Long customerId) {
+		return assetRepository.findByCustomerId(customerId);
 	}
 }
