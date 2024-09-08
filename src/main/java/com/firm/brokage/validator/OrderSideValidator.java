@@ -18,7 +18,6 @@ public class OrderSideValidator implements ConstraintValidator<ValidOrderSide, S
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-		return (OrderSide.BUY.getValue().equals(value)
-				|| OrderSide.SELL.getValue().equals(value));
+		return OrderSide.isValid(value);
 	}
 }

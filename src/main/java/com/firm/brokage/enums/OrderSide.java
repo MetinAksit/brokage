@@ -3,6 +3,8 @@ package com.firm.brokage.enums;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 @Getter
 @RequiredArgsConstructor
 public enum OrderSide {
@@ -19,5 +21,10 @@ public enum OrderSide {
 			}
 		}
 		throw new IllegalArgumentException("No matching OrderSide for value: " + value);
+	}
+
+	public static boolean isValid(String value) {
+		return Arrays.stream(OrderSide.values())
+				.anyMatch(orderSide -> orderSide.getValue().equalsIgnoreCase(value));
 	}
 }

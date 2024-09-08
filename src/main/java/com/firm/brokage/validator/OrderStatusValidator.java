@@ -18,10 +18,6 @@ public class OrderStatusValidator implements ConstraintValidator<ValidOrderStatu
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-		try {
-			return value == null || OrderStatus.fromValue(value) != null;
-		} catch (IllegalArgumentException e) {
-			return false;
-		}
+		return value == null || OrderStatus.isValid(value);
 	}
 }
