@@ -3,6 +3,7 @@ package com.firm.brokage.controller;
 import com.firm.brokage.dto.DepositRequest;
 import com.firm.brokage.dto.DepositResponse;
 import com.firm.brokage.dto.WithdrawRequest;
+import com.firm.brokage.dto.WithdrawResponse;
 import com.firm.brokage.service.AssetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +28,12 @@ public class DepositController {
 	}
 
 	@PostMapping("/withdraw")
-	public ResponseEntity<?> withdraw(@Validated @RequestBody WithdrawRequest request) {
+	public ResponseEntity<WithdrawResponse> withdraw(@Validated @RequestBody WithdrawRequest request) {
+		var depositAsset = assetService.withdraw(request.getCustomer(), request.getCurrency(), request.getAmount());
 
-		return null; // todo
+		var withdrawResponse = WithdrawResponse.fromAsset(depositAsset);
+		withdrawResponse.setIban(request.getIban());
+
+		return ResponseEntity.ok(withdrawResponse);
 	}
 }
