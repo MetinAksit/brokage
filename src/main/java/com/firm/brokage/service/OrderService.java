@@ -9,9 +9,11 @@ import com.firm.brokage.repository.AssetRepository;
 import com.firm.brokage.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class OrderService {
