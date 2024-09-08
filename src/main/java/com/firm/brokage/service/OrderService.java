@@ -1,6 +1,7 @@
 package com.firm.brokage.service;
 
 import com.firm.brokage.entity.Order;
+import com.firm.brokage.enums.Currency;
 import com.firm.brokage.enums.OrderSide;
 import com.firm.brokage.enums.OrderStatus;
 import com.firm.brokage.exception.BusinessException;
@@ -21,7 +22,7 @@ public class OrderService {
 	public Order createOrder(Order order) {
 		if (OrderSide.BUY.equals(order.getOrderSide())) {
 			// check if price amount exists in customer TRY asset
-			var tryAsset = assetRepository.findByCustomerIdAndAssetName(order.getCustomerId(), "TRY");
+			var tryAsset = assetRepository.findByCustomerIdAndAssetName(order.getCustomerId(), Currency.TRY.getValue());
 			if (tryAsset == null || tryAsset.getUsableSize() < order.getPrice()) {
 				throw new BusinessException("Customer doesn't have enough deposit!");
 			}
@@ -73,7 +74,7 @@ public class OrderService {
 
 		if (OrderSide.BUY.equals(order.getOrderSide())) {
 			// if buy, find customer try asset, add price to usable size
-			var tryAsset = assetRepository.findByCustomerIdAndAssetName(order.getCustomerId(), "TRY");
+			var tryAsset = assetRepository.findByCustomerIdAndAssetName(order.getCustomerId(), Currency.TRY.getValue());
 			tryAsset.setUsableSize(tryAsset.getUsableSize() + order.getPrice());
 			assetRepository.save(tryAsset);
 		} else if (OrderSide.SELL.equals(order.getOrderSide())) {

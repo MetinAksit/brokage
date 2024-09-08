@@ -7,6 +7,7 @@ import com.firm.brokage.enums.OrderSide;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class OrderRequest {
 	private Long customer;
 
 	@NotBlank(message = "asset name must be supplied")
+	@Pattern(regexp = "(?i)^(?!TRY$).*", message = "please use deposit/withdrawal api for currency transactions")
 	private String asset;
 
 	@NotBlank(message = "order side must be supplied")
