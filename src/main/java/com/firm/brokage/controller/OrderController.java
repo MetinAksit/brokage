@@ -4,7 +4,6 @@ import com.firm.brokage.annotation.ValidOrderStatus;
 import com.firm.brokage.dto.OrderRequest;
 import com.firm.brokage.dto.OrderResponse;
 import com.firm.brokage.entity.Order;
-import com.firm.brokage.enums.OrderSide;
 import com.firm.brokage.enums.OrderStatus;
 import com.firm.brokage.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +26,7 @@ public class OrderController {
 
 	@PostMapping
 	public ResponseEntity<OrderResponse> createOrder(@Validated @RequestBody OrderRequest request) {
-		var order = Order.builder()
-				.customerId(request.getCustomer())
-				.assetName(request.getAsset())
-				.orderSide(OrderSide.fromValue(request.getSide()))
-				.size(request.getSize())
-				.price(request.getPrice())
-				.build();
-		order = orderService.createOrder(order);
+		var order = orderService.createOrder(OrderRequest.toOrder(request));
 
 		return ResponseEntity.ok(OrderResponse.fromOrder(order));
 	}
