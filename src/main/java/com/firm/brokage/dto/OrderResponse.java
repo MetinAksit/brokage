@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class OrderResponse {
 
+	private Long id;
 	private Long customerId;
 	private String assetName;
 	private OrderSide orderSide;
@@ -23,6 +24,7 @@ public class OrderResponse {
 
 	public static OrderResponse fromOrder(Order order) {
 		return OrderResponse.builder()
+				.id(order.getId())
 				.customerId(order.getCustomerId())
 				.assetName(order.getAssetName())
 				.orderSide(order.getOrderSide())

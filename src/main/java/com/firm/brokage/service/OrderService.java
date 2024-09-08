@@ -57,4 +57,32 @@ public class OrderService {
 	public List<Order> listOrders(Long customer, Long from, Long to, OrderStatus status) {
 		return orderRepository.findByCustomerIdAndCreateDateBetweenAndStatus(customer, from, to, status);
 	}
+
+	public Order deleteOrder(Long id) {
+		// check if there is such order
+		var order = orderRepository.findById(id).orElseThrow(() -> new BusinessException("Invalid order id!"));
+
+		// check if status is pending
+		if (!OrderStatus.PENDING.equals(order.getStatus())) {
+			throw new BusinessException("Invalid order status!");
+		}
+
+		// make order status cancelled
+		order.setStatus(OrderStatus.CANCELLED);
+		orderRepository.save(order);
+
+		if (OrderSide.BUY.equals(order.getOrderSide())) {
+			// if buy, find customer try asset, add price to usable size
+			var tryAsset = assetRepository.findByCustomerIdAndAssetName(order.getCustomerId(), "TRY");
+			tryAsset.setUsableSize(tryAsset.getUsableSize() + order.getPrice());
+			assetRepository.save(tryAsset);
+		} else if (OrderSide.SELL.equals(order.getOrderSide())) {
+			// if sell, find customer asset, add size to usable size
+			var orderAsset = assetRepository.findByCustomerIdAndAssetName(order.getCustomerId(), order.getAssetName());
+			orderAsset.setUsableSize(orderAsset.getUsableSize() + order.getSize());
+			assetRepository.save(orderAsset);
+		}
+
+		return order;
+	}
 }
