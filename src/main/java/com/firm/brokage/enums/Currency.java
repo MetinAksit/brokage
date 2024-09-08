@@ -3,6 +3,8 @@ package com.firm.brokage.enums;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 @Getter
 @RequiredArgsConstructor
 public enum Currency {
@@ -18,5 +20,10 @@ public enum Currency {
 			}
 		}
 		throw new IllegalArgumentException("No matching Currency for value: " + value);
+	}
+
+	public static boolean isValid(String value) {
+		return Arrays.stream(Currency.values())
+				.anyMatch(currency -> currency.getValue().equalsIgnoreCase(value));
 	}
 }
