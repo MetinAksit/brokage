@@ -70,10 +70,6 @@ public class OrderService {
 			throw new BusinessException("Invalid order status!");
 		}
 
-		// make order status cancelled
-		order.setStatus(OrderStatus.CANCELLED);
-		orderRepository.save(order);
-
 		if (OrderSide.BUY.equals(order.getOrderSide())) {
 			// if buy, find customer try asset, add price to usable size
 			var tryAsset = assetRepository.findByCustomerIdAndAssetName(order.getCustomerId(), Currency.TRY.name());
@@ -85,6 +81,10 @@ public class OrderService {
 			orderAsset.setUsableSize(orderAsset.getUsableSize() + order.getSize());
 			assetRepository.save(orderAsset);
 		}
+
+		// make order status cancelled
+		order.setStatus(OrderStatus.CANCELLED);
+		orderRepository.save(order);
 
 		return order;
 	}
