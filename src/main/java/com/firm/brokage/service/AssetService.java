@@ -4,6 +4,7 @@ import com.firm.brokage.entity.Asset;
 import com.firm.brokage.exception.BusinessException;
 import com.firm.brokage.repository.AssetRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ public class AssetService {
 
 	private final AssetRepository assetRepository;
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Asset deposit(Long customerId, String assetName, Integer amount) {
 		// find customer's currency asset
 		var asset = assetRepository.findByCustomerIdAndAssetName(customerId, assetName);
@@ -36,6 +38,7 @@ public class AssetService {
 		return asset;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Asset withdraw(Long customerId, String assetName, Integer amount) {
 		// find customer's currency asset
 		var asset = assetRepository.findByCustomerIdAndAssetName(customerId, assetName);
@@ -51,6 +54,7 @@ public class AssetService {
 		return asset;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public List<Asset> listAssets(Long customerId) {
 		return assetRepository.findByCustomerId(customerId);
 	}

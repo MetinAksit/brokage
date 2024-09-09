@@ -8,6 +8,7 @@ import com.firm.brokage.exception.BusinessException;
 import com.firm.brokage.repository.AssetRepository;
 import com.firm.brokage.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class OrderService {
 	private final OrderRepository orderRepository;
 	private final AssetRepository assetRepository;
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Order createOrder(Order order) {
 		if (OrderSide.BUY.equals(order.getOrderSide())) {
 			// check if price amount exists in customer TRY asset
@@ -53,14 +55,17 @@ public class OrderService {
 		return order;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public List<Order> listOrders(Long customer, Long from, Long to) {
 		return orderRepository.findByCustomerIdAndCreateDateBetween(customer, from, to);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public List<Order> listOrders(Long customer, Long from, Long to, OrderStatus status) {
 		return orderRepository.findByCustomerIdAndCreateDateBetweenAndStatus(customer, from, to, status);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Order deleteOrder(Long id) {
 		// check if there is such order
 		var order = orderRepository.findById(id).orElseThrow(() -> new BusinessException("Invalid order id!"));
